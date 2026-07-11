@@ -1,10 +1,25 @@
-# COR MCP Server
+<div align="center">
 
-Comprehensive **MCP server** for [Project COR](https://www.projectcor.com) — a project management platform for creative and professional teams.
+# ⬡ COR MCP Server
 
-Exposes **61 tools** covering the complete COR REST API surface as MCP tools, usable from any MCP-compatible client (Hermes Agent, Claude Desktop, Cursor, Claude Code, Cline, Windsurf, etc.).
+**61 MCP tools** for [Project COR](https://www.projectcor.com) — the project management platform for creative and professional teams.
 
-## Features
+[![CI](https://img.shields.io/github/actions/workflow/status/fxckcode/mcp-cor/ci.yml?branch=main&logo=github&label=tests)](https://github.com/fxckcode/mcp-cor/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python)](https://python.org)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Ruff](https://img.shields.io/badge/Ruff-enabled-7A1FA2?logo=ruff)](https://astral.sh/ruff)
+[![uv](https://img.shields.io/badge/uv-package%20manager-6929C4?logo=uv)](https://docs.astral.sh/uv/)
+[![MCP](https://img.shields.io/badge/MCP-compatible-5C5CE7?logo=modelcontextprotocol)](https://modelcontextprotocol.io)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker)](Dockerfile)
+[![Tests](https://img.shields.io/badge/tests-24%20passing-22c55e)](tests/)
+
+Exposes the **complete** COR REST API surface as MCP tools — usable from **any** MCP-compatible client: Hermes Agent, Claude Desktop, Cursor, Claude Code, Cline, Windsurf, and more.
+
+</div>
+
+---
+
+## ✨ Features
 
 - **61 MCP tools** — full CRUD for all COR entities across 11 modules
 - **Dual authentication** — pick what suits you:
@@ -14,7 +29,7 @@ Exposes **61 tools** covering the complete COR REST API surface as MCP tools, us
 - **Dual transport** — `stdio` (default for agents) and `sse` (HTTP for remote access)
 - **OAuth token auto-refresh** — never worry about expiry mid-session
 - **Docker support** — one-command deployment
-- **Hermes Agent skill** included — `skills/cor-mcp-setup/` for easy integration
+- **Hermes Agent skill** included — see [`skills/cor-mcp-setup/`](skills/cor-mcp-setup/SKILL.md)
 - **24 passing tests** — fully mocked, no live credentials required
 
 ### Entity Coverage
@@ -23,17 +38,19 @@ Exposes **61 tools** covering the complete COR REST API surface as MCP tools, us
 |-----------------|-------|--------|
 | Projects        | 14    | CRUD, collaborators, costs, labels, ratecards, templates, profitability |
 | Tasks           | 10    | Search, CRUD, collaborators, labels |
+| Team & Users    | 8     | Profile, users, teams, working time |
 | Clients         | 6     | CRUD, fees |
 | Contracts       | 5     | CRUD, positions |
 | Time Tracking   | 5     | Log, search, status, accept suggested |
-| Team & Users    | 8     | Profile, users, teams, working time |
 | Messaging       | 4     | Project + task messages |
 | Allocations     | 3     | CRUD |
 | Ratecards       | 3     | CRUD |
 | Products        | 2     | CRUD |
 | Labels          | 1     | By entity type |
 
-## Quick Start
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
@@ -44,9 +61,9 @@ Exposes **61 tools** covering the complete COR REST API surface as MCP tools, us
 ### Install & Run
 
 ```bash
-# Clone the repo
-git clone https://github.com/YOUR_USER/cor-mcp-server.git
-cd cor-mcp-server
+# Clone
+git clone https://github.com/fxckcode/mcp-cor.git
+cd mcp-cor
 
 # Install with uv (recommended)
 uv sync
@@ -57,29 +74,27 @@ pip install -e .
 
 ### Configure
 
-Copy `.env.example` to `.env`:
-
 ```bash
 cp .env.example .env
 ```
 
 Then choose **one** auth mode in `.env`:
 
-**Mode A — Email + Password (recommended for personal use):**
+**Mode A — Email + Password** _(recommended for personal use)_
 ```ini
 COR_EMAIL=your.email@company.com
 COR_PASSWORD=your_password
 COR_API_URL=https://api.projectcor.com/v1
 ```
 
-**Mode B — API Key + Client Secret (for server-to-server):**
+**Mode B — API Key + Client Secret** _(for server-to-server)_
 ```ini
 COR_API_KEY=your_api_key
 COR_CLIENT_SECRET=your_client_secret
 COR_API_URL=https://api.projectcor.com/v1
 ```
 
-The server auto-detects which mode you configured. Email/password takes priority when both are set.
+The server **auto-detects** which mode you configured. Email/password takes priority when both are set.
 
 ### Run
 
@@ -94,7 +109,9 @@ uv run cor-mcp-server --transport sse --host 0.0.0.0 --port 8000
 uv run cor-mcp-server --verbose
 ```
 
-## Authentication
+---
+
+## 🔐 Authentication
 
 Two modes supported. The server auto-detects which to use.
 
@@ -113,14 +130,17 @@ Returns JWT `access_token` + `refresh_token`. Auto-refresh built in.
 
 ```
 POST https://api.projectcor.com/v1/oauth/token?grant_type=client_credentials
-Authorization: Basic base64(COR_API_KEY:COR_CLIENT_SECRET)
+Authorization: Basic base64(api_key:client_secret)
 ```
 
 Returns `access_token` (1-hour TTL). Cached and auto-refreshed with a 60-second safety margin.
 
-## Connecting from MCP Clients
+---
 
-### Hermes Agent (recommended)
+## 🔌 Connecting from MCP Clients
+
+<details>
+<summary><b>Hermes Agent</b> (recommended) — <i>click to expand</i></summary>
 
 Add to `~/.hermes/config.yaml`:
 
@@ -138,8 +158,10 @@ mcp_servers:
 ```
 
 Then restart or run `/reload-mcp`.
+</details>
 
-### Claude Desktop
+<details>
+<summary><b>Claude Desktop</b> — <i>click to expand</i></summary>
 
 Add to `claude_desktop_config.json`:
 
@@ -158,8 +180,10 @@ Add to `claude_desktop_config.json`:
   }
 }
 ```
+</details>
 
-### Cursor / Windsurf / Cline
+<details>
+<summary><b>Cursor / Windsurf / Cline</b> — <i>click to expand</i></summary>
 
 In MCP Servers settings, add:
 
@@ -167,17 +191,18 @@ In MCP Servers settings, add:
 - **Type**: command
 - **Command**: `uv run --directory /path/to/cor-mcp-server python -m cor_mcp_server`
 - **Environment variables**: `COR_EMAIL`, `COR_PASSWORD`, `COR_API_URL`
+</details>
 
-### Claude Code
+<details>
+<summary><b>Claude Code</b> — <i>click to expand</i></summary>
 
 ```bash
 env COR_EMAIL=your@email.com COR_PASSWORD=your_pass COR_API_URL=https://api.projectcor.com/v1 \
   npx @anthropic/claude-code --mcp "uv run --directory /path/to/cor-mcp-server python -m cor_mcp_server"
 ```
+</details>
 
 ### Docker
-
-Build with the included `Dockerfile`, pass env vars at runtime (supports either auth mode).
 
 ```bash
 docker build -t cor-mcp-server .
@@ -198,7 +223,9 @@ docker run -i --rm \
   cor-mcp-server --transport sse
 ```
 
-## Available Tools
+---
+
+## 🛠 Available Tools
 
 All tool names are prefixed with `cor_` for clean discoverability.
 
@@ -236,6 +263,19 @@ All tool names are prefixed with `cor_` for clean discoverability.
 | `cor_add_task_label` | Add label to task |
 | `cor_remove_task_label` | Remove label from task |
 
+### Team & Users (8 tools)
+
+| Tool | Description |
+|------|-------------|
+| `cor_get_my_profile` | Get current user profile |
+| `cor_list_users` | List users with filters |
+| `cor_get_user` | Get user details |
+| `cor_list_teams` | List teams |
+| `cor_create_team` | Create a new team |
+| `cor_add_team_users` | Add users to a team |
+| `cor_remove_team_users` | Remove users from a team |
+| `cor_get_working_time` | Get working time for users |
+
 ### Clients (6 tools)
 
 | Tool | Description |
@@ -266,19 +306,6 @@ All tool names are prefixed with `cor_` for clean discoverability.
 | `cor_get_hours_by_date` | Get time entries by date |
 | `cor_change_hours_status` | Change time entry status |
 | `cor_accept_suggested_hours` | Accept suggested hours |
-
-### Team & Users (8 tools)
-
-| Tool | Description |
-|------|-------------|
-| `cor_get_my_profile` | Get current user profile |
-| `cor_list_users` | List users with filters |
-| `cor_get_user` | Get user details |
-| `cor_list_teams` | List teams |
-| `cor_create_team` | Create a new team |
-| `cor_add_team_users` | Add users to a team |
-| `cor_remove_team_users` | Remove users from a team |
-| `cor_get_working_time` | Get working time for users |
 
 ### Messaging (4 tools)
 
@@ -318,7 +345,9 @@ All tool names are prefixed with `cor_` for clean discoverability.
 |------|-------------|
 | `cor_get_labels` | Get labels (filter by entity type: project, task, user) |
 
-## Architecture
+---
+
+## 🏗 Architecture
 
 ```
 ┌──────────────────────┐     ┌───────────────────────────┐     ┌──────────────────────┐
@@ -332,7 +361,9 @@ All tool names are prefixed with `cor_` for clean discoverability.
                              └───────────────────────────┘
 ```
 
-## Development
+---
+
+## 🧑‍💻 Development
 
 ```bash
 # Install dev deps
@@ -355,6 +386,7 @@ To add a new tool to the COR MCP Server:
 1. **Create or edit a tool module** in `cor_mcp_server/tools/` (e.g., `reports.py`).
 
 2. **Write an async function** with the `cor_` prefix pattern:
+
    ```python
    from ..context import get_client
 
@@ -372,6 +404,7 @@ To add a new tool to the COR MCP Server:
    ```
 
 3. **Register the tool** in `cor_mcp_server/server.py`:
+
    ```python
    from .tools import reports as _reports
 
@@ -398,12 +431,15 @@ Tests are in `tests/test_tools.py` and cover:
 
 All tests use mocking — **no live COR credentials required** to run them.
 
-## Project Structure
+---
+
+## 📁 Project Structure
 
 ```
 cor-mcp-server/
 ├── pyproject.toml              # Dependencies and metadata
 ├── README.md                   # This file
+├── LICENSE                     # MIT license
 ├── .env.example                # Env var template (both auth modes)
 ├── Dockerfile                  # Container deployment
 ├── skills/                     # Hermes Agent skills
@@ -412,7 +448,7 @@ cor-mcp-server/
 ├── handoff-personal-hermes.md  # Self-contained instructions for personal Hermes
 ├── cor_mcp_server/
 │   ├── __init__.py             # Package init
-│   ├── __main__.py             # CLI entry point (argparse: --transport, --host, --port)
+│   ├── __main__.py             # CLI entry point
 │   ├── server.py               # FastMCP server + tool registration (all 61 tools)
 │   ├── auth.py                 # OAuth 2.0 dual-mode (user creds + client creds)
 │   ├── client.py               # COR API HTTP client (httpx, async)
@@ -434,13 +470,24 @@ cor-mcp-server/
 ├── tests/
 │   ├── __init__.py
 │   └── test_tools.py           # 24 tests for auth, client, and tools
-└── .venv/                      # Virtual environment (local)
+├── .github/                    # GitHub community files
+│   ├── dependabot.yml          # Dependency auto-updates
+│   ├── ISSUE_TEMPLATE/         # Bug report + feature request templates
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── workflows/              # CI + Release pipelines
+├── .gitignore
+├── .gitattributes
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
+└── SECURITY.md
 ```
 
-## License
+---
 
-MIT
+## 📄 License
 
-## Author
+[MIT](LICENSE)
+
+## 👤 Author
 
 **Alejandro Duran** — Omnicom Media Group
