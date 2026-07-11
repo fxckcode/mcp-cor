@@ -7,21 +7,15 @@ Supports both stdio and SSE/HTTP transports.
 
 from __future__ import annotations
 
-import json
 import logging
 import os
-import sys
-from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
 from .auth import AuthManager
-from .client import CORClient, CORClientError
+from .client import CORClient
 from .context import set_client
 
-logger = logging.getLogger(__name__)
-
-# Import tool functions
 from .tools import projects as _projects
 from .tools import tasks as _tasks
 from .tools import time_tracking as _time_tracking
@@ -33,6 +27,8 @@ from .tools import labels as _labels
 from .tools import ratecards as _ratecards
 from .tools import allocations as _allocations
 from .tools import products as _products
+
+logger = logging.getLogger(__name__)
 
 
 def create_server(

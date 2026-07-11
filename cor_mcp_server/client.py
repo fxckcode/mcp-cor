@@ -11,7 +11,7 @@ from typing import Any
 
 import httpx
 
-from .auth import AuthManager, AuthError
+from .auth import AuthManager
 
 logger = logging.getLogger(__name__)
 

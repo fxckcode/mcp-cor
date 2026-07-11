@@ -5,7 +5,6 @@ Project COR MCP tools — Messaging.
 from __future__ import annotations
 
 import json
-from typing import Any
 
 from ..context import get_client
 
